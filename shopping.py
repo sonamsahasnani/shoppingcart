@@ -1,38 +1,42 @@
 import pandas as pd
 import psycopg2
 conn = psycopg2.connect(database = "testdb", user = "postgres", host = "127.0.0.1", port = "5432")
-print(conn)
 print ("Opened database successfully")
 
 class Shopping():  # shopping
-    def __init__(self,id,role,argument):
+    def __init__(self,id,role):
         self.user = id
         self.user_type = role
-        self.argument=argument
-    
-    def SwitchExample(self):
-        switcher = {
-            1: self.list_product(),
-            2: self.add_product(),
-            3: self.delete_product(),
-            4: self.view_orders()
-        }
-
-        print(switcher.get(self.argument, "nothing"))
-
-    def SwitchExample2(self):
-        switcher = {
-            1: self.list_product(),
-            2: self.add_items_to_cart(),
-            3: self.view_order_history()
-        }
-        print(switcher.get(self.argument, "nothing"))
-
+        
     def __call__(self):
+        argument=int(input("Enter valid argument: "))
         if self.user_type=='admin':
-           self.SwitchExample()
+           self.admin_functions(argument)
         else:
-            self.SwitchExample2()
+            self.customer_functions(argument)
+    
+   def admin_functions(self,argument):
+        if argument==1:
+            self.list_product()
+        if argument==2:
+            self.add_product()
+        if argument==3:
+            self.delete_product()
+        if argument==4:
+            self.view_orders()
+        else:
+            print("input value did not matched..Please enter valid input")
+    
+    def customer_functions(self,argument):
+        if argument==1:
+            self.list_product()
+        if argument==2:
+            self.add_items_to_cart()
+        if argument==3:
+            self.view_order_history()
+        else:
+            print("input value did not matched..Please enter valid input")
+
    
     def view_orders(self):
         cursor = conn.cursor()
@@ -104,8 +108,8 @@ class Shopping():  # shopping
 if __name__ == '__main__':
     try:
         print("Enter username and password")
-        user=input("Enter username")
-        password=input("Enter password")
+        user=input("Enter username: ")
+        password=input("Enter password: ")
         cursor = conn.cursor()
         sql = "select u_id,role from user_account where username='%s' and password='%s'" % (user,password)
         cursor.execute(sql)
@@ -116,8 +120,7 @@ if __name__ == '__main__':
             print("\n1.Enter 1 for view all products\n2.Enter 2 for adding products\n3.Enter 3 for deleting any product\n4.Enter 4 for view order reports")
         elif role=='customer':
             print("\n1.Enter 1 to browse all the products \n2.Enter 2 to add products into the cart\n3.Enter 3 to see the order history")
-        argument=int(input())
-        Shopping(id=id,role=role,argument=argument).__call__()
+        Shopping(id=id,role=role).__call__()
     except:
         print("Please enter correct username and password")
 
