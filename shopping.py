@@ -46,6 +46,7 @@ class Shopping:  # shopping
         cursor.execute(sql)
         results=cursor.fetchall()
         df = pd.DataFrame(results)
+        print(df)
     
     def list_product(self):
         cursor = conn.cursor()
