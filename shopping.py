@@ -3,7 +3,7 @@ import psycopg2
 conn = psycopg2.connect(database = "testdb", user = "postgres", host = "127.0.0.1", port = "5432")
 print ("Opened database successfully")
 
-class Shopping():  # shopping
+class Shopping:  # shopping
     def __init__(self,id,role):
         self.user = id
         self.user_type = role
