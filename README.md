@@ -1,6 +1,10 @@
 # shoppingcart
 Python console based shopping-cart application
 
+# Run server
+   ```
+     python shopping.py
+    ````
 # Creating a virtual environment
 Install virtualenv package using pip
 ```
