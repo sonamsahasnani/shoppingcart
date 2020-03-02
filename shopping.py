@@ -7,7 +7,7 @@ class Shopping():  # shopping
     def __init__(self,id,role):
         self.user = id
         self.user_type = role
-        
+
     def __call__(self):
         argument=int(input("Enter valid argument: "))
         if self.user_type=='admin':
@@ -15,30 +15,30 @@ class Shopping():  # shopping
         else:
             self.customer_functions(argument)
     
-   def admin_functions(self,argument):
-     try:
-        if argument==1:
-            self.list_product()
-        if argument==2:
-            self.add_product()
-        if argument==3:
-            self.delete_product()
-        if argument==4:
-            self.view_orders()
-     except:
-        print("input value did not matched..Please enter valid input")
-    
+    def admin_functions(self,argument):
+            try:
+                if argument==1:
+                    self.list_product()
+                if argument==2:
+                    self.add_product()
+                if argument==3:
+                    self.delete_product()
+                if argument==4:
+                    self.view_orders()
+            except:
+                    print("input value did not matched..Please enter valid input")
+            
     def customer_functions(self,argument):
-      try:
-        if argument==1:
-            self.list_product()
-        if argument==2:
-            self.add_items_to_cart()
-        if argument==3:
-            self.view_order_history()
-        except:
-            print("input value did not matched..Please enter valid input")
-
+             try:
+                if argument==1:
+                    self.list_product()
+                if argument==2:
+                    self.add_items_to_cart()
+                if argument==3:
+                    self.view_order_history()
+             except:
+                    print("input value did not matched..Please enter valid input")
+                    
    
     def view_orders(self):
         cursor = conn.cursor()
@@ -46,8 +46,6 @@ class Shopping():  # shopping
         cursor.execute(sql)
         results=cursor.fetchall()
         df = pd.DataFrame(results)
-        print(df)
-     
     
     def list_product(self):
         cursor = conn.cursor()
@@ -56,7 +54,6 @@ class Shopping():  # shopping
         results=cursor.fetchall()
         df = pd.DataFrame(results)
         print(df)
-       
 
     def add_product(self):
         print("enter product details:")
@@ -67,7 +64,7 @@ class Shopping():  # shopping
         sql="insert into product values(%s,'%s',%s)"%(id,name,price)
         cursor.execute(sql)
         conn.commit()
-        print("product with product id {} inserted in the product table".format(id))
+        print("inserted")
 
     def delete_product(self):
         cursor = conn.cursor()
@@ -77,34 +74,35 @@ class Shopping():  # shopping
         print("item is deleted")
 
     def add_items_to_cart(self):
-        cursor = conn.cursor()
         input_string = input("Enter the product ids you want to add in the cart : ")
         cartitems = input_string.split(',')
-        print("cart list is ", cartitems)
+        print("user list is ", cartitems)
+        cursor = conn.cursor()
         sql="Select sum(list_price) from product where id in (%s)" % ",".join(map(str,cartitems))
         cursor.execute(sql)
         result=cursor.fetchone()[0]
         print("total value of the cart Items are: {}".format(result))
-        a=input("if you want delete any product from your cart  enter y and if not enter n and check them out: ")
-        if a=='y':
+        input_value=input("if you want delete any product enter d and if you want to add any product enter a and if you want to checkout enter c: ")
+        if input_value=='y':
             id=int(input("Enter product id: "))
             cartitems.remove('id')
             print(cartitems)
         else:
-            sql="Select sum(list_price) from product where id in (%s)" % ",".join(map(str,cartitems))
+            sql="Select sum(list_price) from product where p_id in (%s)" % ",".join(map(str,cartitems))
             cursor.execute(sql)
             result=cursor.fetchone()[0]
             print("total value of the cart Items are: {}".format(result))
             for i in cartitems:
-                sql="Select list_price from product where id=%s" %i
+                sql="Select list_price from product where p_id=%s" %i
                 cursor.execute(sql)
                 price=cursor.fetchone()[0]
                 self.add_order(i,price)
 
 
-    def view_order_history(self):    
+    def view_order_history(self): 
         cursor = conn.cursor()
-        sql="Select * from order_history where c_id=%s"%self.user
+        sql="Select * from order_history where c_id=%s" %self.user
+        cursor.execute(sql)
         results=cursor.fetchall()
         df = pd.DataFrame(results)
         print(df)
@@ -113,8 +111,9 @@ class Shopping():  # shopping
         cursor = conn.cursor()
         sql="Insert into order_history (p_id,c_id,price) values(%s,%s,%s) RETURNING id;"
         cursor.execute(sql,(product_id,self.user,price,))
-        results=cursor.fetchall()
+        results=cursor.fetchone()
         conn.commit()
+        print("orders checked out from the cart to order history")
 
 if __name__ == '__main__':
     try:
@@ -122,7 +121,7 @@ if __name__ == '__main__':
         user=input("Enter username: ")
         password=input("Enter password: ")
         cursor = conn.cursor()
-        sql = "select id,role from user_account where username='%s' and password='%s'" % (user,password)
+        sql = "select u_id,role from user_account where username='%s' and password='%s'" % (user,password)
         cursor.execute(sql)
         result=cursor.fetchone()
         id=result[0]
