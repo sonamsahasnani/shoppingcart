@@ -46,7 +46,8 @@ class Shopping():  # shopping
         cursor.execute(sql)
         results=cursor.fetchall()
         df = pd.DataFrame(results)
-        return df
+        print(df)
+     
     
     def list_product(self):
         cursor = conn.cursor()
@@ -54,8 +55,8 @@ class Shopping():  # shopping
         cursor.execute(sql)
         results=cursor.fetchall()
         df = pd.DataFrame(results)
-        #print(df)
-        return df
+        print(df)
+       
 
     def add_product(self):
         print("enter product details:")
@@ -66,7 +67,7 @@ class Shopping():  # shopping
         sql="insert into product values(%s,'%s',%s)"%(id,name,price)
         cursor.execute(sql)
         conn.commit()
-        print("inserted")
+        print("product with product id {} inserted in the product table".format(id))
 
     def delete_product(self):
         cursor = conn.cursor()
@@ -79,7 +80,7 @@ class Shopping():  # shopping
         cursor = conn.cursor()
         input_string = input("Enter the product ids you want to add in the cart : ")
         cartitems = input_string.split(',')
-        print("user list is ", cartitems)
+        print("cart list is ", cartitems)
         a=input("if you want delete any product from your cart  enter y and if not enter n and check them out: ")
         if a=='y':
             id=int(input("Enter product id: "))
