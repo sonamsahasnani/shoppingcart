@@ -22,3 +22,4 @@ source mypython/bin/activate
 ```
 python shopping.py
 ```
+
