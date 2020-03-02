@@ -70,7 +70,7 @@ class Shopping:  # shopping
     def delete_product(self):
         cursor = conn.cursor()
         id=int(input("enter product id: "))
-        sql="Delete from product where id=%s" %id
+        sql="Delete from product where p_id=%s" %id
         cursor.execute(sql)
         print("item is deleted")
 
