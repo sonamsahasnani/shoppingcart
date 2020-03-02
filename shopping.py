@@ -16,6 +16,7 @@ class Shopping():  # shopping
             self.customer_functions(argument)
     
    def admin_functions(self,argument):
+     try:
         if argument==1:
             self.list_product()
         if argument==2:
@@ -24,17 +25,18 @@ class Shopping():  # shopping
             self.delete_product()
         if argument==4:
             self.view_orders()
-        else:
-            print("input value did not matched..Please enter valid input")
+     except:
+        print("input value did not matched..Please enter valid input")
     
     def customer_functions(self,argument):
+      try:
         if argument==1:
             self.list_product()
         if argument==2:
             self.add_items_to_cart()
         if argument==3:
             self.view_order_history()
-        else:
+        except:
             print("input value did not matched..Please enter valid input")
 
    
