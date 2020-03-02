@@ -81,14 +81,22 @@ class Shopping():  # shopping
         input_string = input("Enter the product ids you want to add in the cart : ")
         cartitems = input_string.split(',')
         print("cart list is ", cartitems)
+        sql="Select sum(list_price) from product where id in (%s)" % ",".join(map(str,cartitems))
+        cursor.execute(sql)
+        result=cursor.fetchone()[0]
+        print("total value of the cart Items are: {}".format(result))
         a=input("if you want delete any product from your cart  enter y and if not enter n and check them out: ")
         if a=='y':
             id=int(input("Enter product id: "))
             cartitems.remove('id')
             print(cartitems)
         else:
+            sql="Select sum(list_price) from product where id in (%s)" % ",".join(map(str,cartitems))
+            cursor.execute(sql)
+            result=cursor.fetchone()[0]
+            print("total value of the cart Items are: {}".format(result))
             for i in cartitems:
-                sql="Select list_price from product where p_id=%s" %i
+                sql="Select list_price from product where id=%s" %i
                 cursor.execute(sql)
                 price=cursor.fetchone()[0]
                 self.add_order(i,price)
@@ -114,7 +122,7 @@ if __name__ == '__main__':
         user=input("Enter username: ")
         password=input("Enter password: ")
         cursor = conn.cursor()
-        sql = "select u_id,role from user_account where username='%s' and password='%s'" % (user,password)
+        sql = "select id,role from user_account where username='%s' and password='%s'" % (user,password)
         cursor.execute(sql)
         result=cursor.fetchone()
         id=result[0]
