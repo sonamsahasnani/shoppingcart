@@ -82,7 +82,7 @@ class Shopping():  # shopping
         cursor.execute(sql)
         result=cursor.fetchone()[0]
         print("total value of the cart Items are: {}".format(result))
-        input_value=input("if you want delete any product enter d and if you want to add any product enter a and if you want to checkout enter c: ")
+        input_value=input("if you want delete any product from your cart  enter y and if not enter n and check them out: ")
         if input_value=='y':
             id=int(input("Enter product id: "))
             cartitems.remove('id')
